@@ -6,43 +6,67 @@ import Register from "../pages/Auth/Register";
 import Dashboard from "../layout/Dashboard";
 import ErrorPage from "../pages/Shared/ErrorPage";
 
+import AdminRoute from "./AdminRoute";
+import TutorRoute from "./TutorRoute";
+import StudentRoute from "./StudentRoute";
+import PrivateRoute from "./PrivateRoute";
 
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import MyApplications from "../pages/Dashboard/Tutor/MyApplications";
+import CreateTuition from "../pages/Dashboard/Student/CreateTuition";
+import MyTuitions from "../pages/Dashboard/Student/MyTuitions";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main></Main>,
-    errorElement: <ErrorPage></ErrorPage>, 
+    element: <Main />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        path: '/',
-        element: <Home></Home>
-      },
-      {
-        path: 'login',
-        element: <Login></Login>
-      },
-      {
-        path: 'register',
-        element: <Register></Register>
-      }
+      { path: "/", element: <Home /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> }
     ]
   },
+
   {
     path: "dashboard",
-    element: <Dashboard></Dashboard>, 
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
     children: [
       {
-        path: 'my-tuitions',
-        element: <div>My Tuitions Page</div> 
+        path: "my-tuitions",
+        element: (
+          <StudentRoute>
+            <MyTuitions />
+          </StudentRoute>
+        )
       },
       {
-        path: 'users',
-        element: <div>Manage Users Page</div>
+        path: "post-tuition",
+        element: (
+          <StudentRoute>
+            <CreateTuition />
+          </StudentRoute>
+        )
       },
       {
-        path: 'my-applications',
-        element: <div>My Applications Page</div>
+        path: "users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        )
+      },
+      {
+        path: "my-applications",
+        element: (
+          <TutorRoute>
+            <MyApplications />
+          </TutorRoute>
+        )
       }
     ]
   }
