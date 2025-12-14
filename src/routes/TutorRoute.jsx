@@ -1,11 +1,21 @@
-import React from 'react';
+import { Navigate, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 
-const TutorRoute = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+const TutorRoute = ({ children }) => {
+    const { user, loading } = useAuth();
+    const [role, isRoleLoading] = useRole();
+    const location = useLocation();
+
+    if (loading || isRoleLoading) {
+        return <span className="loading loading-spinner loading-lg"></span>;
+    }
+
+    if (user && role === 'tutor') {
+        return children;
+    }
+
+    return <Navigate to="/" state={{ from: location }} replace></Navigate>;
 };
 
 export default TutorRoute;
