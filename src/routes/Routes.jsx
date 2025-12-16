@@ -15,6 +15,7 @@ import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import MyApplications from "../pages/Dashboard/Tutor/MyApplications";
 import CreateTuition from "../pages/Dashboard/Student/CreateTuition";
 import MyTuitions from "../pages/Dashboard/Student/MyTuitions";
+import ManageTuitions from "../pages/Dashboard/Admin/ManageTuitions";
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +62,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-tuitions",
+        element: (
+          <AdminRoute>
+            <ManageTuitions />
           </AdminRoute>
         ),
       },
