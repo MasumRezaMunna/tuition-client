@@ -10,9 +10,15 @@ const useRole = () => {
     enabled: !loading && !!user?.email,
     queryKey: ["role", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/role/${user.email}`);
+      const res = await axiosSecure.get(
+        `/users/role/${encodeURIComponent(user.email)}`
+      );
       return res.data.role;
     },
+    catch (error) {
+    console.error("Failed to fetch role:", error);
+    return null;
+  },
   });
 
   return [role, loading || roleLoading];

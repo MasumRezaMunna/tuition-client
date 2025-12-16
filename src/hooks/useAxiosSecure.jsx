@@ -2,38 +2,36 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useAuth from './useAuth'; 
 
-const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000' 
-});
-
 const useAxiosSecure = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
 
-    axiosSecure.interceptors.request.use(function (config) {
+    const instance = axios.create({
+        baseURL: 'http://localhost:5000'
+    });
+
+    instance.interceptors.request.use(config => {
         const token = localStorage.getItem('access-token');
         if (token) {
-            config.headers.authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
-    }, function (error) {
-        return Promise.reject(error);
-    });
+    }, error => Promise.reject(error));
 
-    axiosSecure.interceptors.response.use(function (response) {
-        return response;
-    }, async (error) => {
-        const status = error.response.status;
-        
-        if (status === 401 || status === 403) {
-            await logOut();
-            navigate('/login');
-            localStorage.removeItem('access-token'); 
+    instance.interceptors.response.use(
+        response => response,
+        async error => {
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                console.warn("Unauthorized! Logging out...");
+                localStorage.removeItem('access-token');
+                await logOut();
+                navigate('/login');
+            }
+            return Promise.reject(error);
         }
-        return Promise.reject(error);
-    });
+    );
 
-    return axiosSecure;
+    return instance;
 };
 
 export default useAxiosSecure;
