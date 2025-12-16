@@ -24,8 +24,8 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> }
-    ]
+      { path: "register", element: <Register /> },
+    ],
   },
 
   {
@@ -37,12 +37,16 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        element: <h2 className="text-2xl font-          bold">Welcome to Dashboard</h2>,
+      },
+      {
         path: "my-tuitions",
         element: (
           <StudentRoute>
             <MyTuitions />
           </StudentRoute>
-        )
+        ),
       },
       {
         path: "post-tuition",
@@ -50,7 +54,7 @@ export const router = createBrowserRouter([
           <StudentRoute>
             <CreateTuition />
           </StudentRoute>
-        )
+        ),
       },
       {
         path: "users",
@@ -58,7 +62,7 @@ export const router = createBrowserRouter([
           <AdminRoute>
             <ManageUsers />
           </AdminRoute>
-        )
+        ),
       },
       {
         path: "my-applications",
@@ -66,8 +70,8 @@ export const router = createBrowserRouter([
           <TutorRoute>
             <MyApplications />
           </TutorRoute>
-        )
-      }
-    ]
-  }
+        ),
+      },
+    ],
+  },
 ]);
