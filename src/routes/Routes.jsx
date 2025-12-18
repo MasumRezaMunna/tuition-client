@@ -16,6 +16,7 @@ import MyApplications from "../pages/Dashboard/Tutor/MyApplications";
 import CreateTuition from "../pages/Dashboard/Student/CreateTuition";
 import MyTuitions from "../pages/Dashboard/Student/MyTuitions";
 import ManageTuitions from "../pages/Dashboard/Admin/ManageTuitions";
+import AllTuitions from "../pages/Tuition/AllTuitions";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      {
+        path: "tuitions",
+        element: <AllTuitions />,
+      },
     ],
   },
 
@@ -39,7 +44,9 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <h2 className="text-2xl font-          bold">Welcome to Dashboard</h2>,
+        element: (
+          <h2 className="text-2xl font-          bold">Welcome to Dashboard</h2>
+        ),
       },
       {
         path: "my-tuitions",
