@@ -18,6 +18,7 @@ import MyTuitions from "../pages/Dashboard/Student/MyTuitions";
 import ManageTuitions from "../pages/Dashboard/Admin/ManageTuitions";
 import AllTuitions from "../pages/Tuition/AllTuitions";
 import Profile from "../pages/Dashboard/Profile";
+import AdminStats from "../pages/Dashboard/Admin/AdminStats";
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+    path: 'statistics',
+    element: <AdminRoute><AdminStats /></AdminRoute>
+},
       {
         path: "my-applications",
         element: (
