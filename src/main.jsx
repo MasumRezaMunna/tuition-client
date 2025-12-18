@@ -6,7 +6,7 @@ import { router } from './routes/Routes';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AuthProvider from './providers/AuthProvider';
-import Footer from "../components/Shared/Footer";
+import Footer from "./components/Shared/Footer";
 
 const queryClient = new QueryClient()
 
