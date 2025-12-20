@@ -40,17 +40,6 @@ const ManageUsers = () => {
     });
   };
 
-  const handleMakeAdmin = (user) => {
-    axiosSecure
-      .patch(`/users/role/${user._id}`, { role: "admin" })
-      .then((res) => {
-        if (res.data.modifiedCount > 0) {
-          refetch();
-          alert(`${user.name} is now an Admin!`);
-        }
-      });
-  };
-
   const handleDeleteUser = (user) => {
     Swal.fire({
       title: "Are you sure?",
@@ -125,19 +114,6 @@ const ManageUsers = () => {
                     <span className="badge badge-secondary">Tutor</span>
                   ) : (
                     <span className="badge badge-ghost">Student</span>
-                  )}
-                </td>
-
-                <td>
-                  {user.role === "admin" ? (
-                    <span className="text-green-600 font-bold">Admin</span>
-                  ) : (
-                    <button
-                      onClick={() => handleMakeAdmin(user)}
-                      className="btn btn-sm btn-outline btn-primary"
-                    >
-                      Make Admin
-                    </button>
                   )}
                 </td>
                 <td className="space-x-2">

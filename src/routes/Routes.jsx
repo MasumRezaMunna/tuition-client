@@ -19,7 +19,6 @@ import ManageTuitions from "../pages/Dashboard/Admin/ManageTuitions";
 import AllTuitions from "../pages/Tuition/AllTuitions";
 import Profile from "../pages/Dashboard/Profile";
 import AdminStats from "../pages/Dashboard/Admin/AdminStats";
-import Payment from "../components/Modals/payment";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +46,9 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <h2 className="text-2xl font-bold">Welcome to Dashboard</h2>,
+        element: (
+          <h2 className="text-2xl font-bold">Welcome to Dashboard</h2>
+        ),
       },
       {
         path: "my-tuitions",
@@ -82,13 +83,9 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "statistics",
-        element: (
-          <AdminRoute>
-            <AdminStats />
-          </AdminRoute>
-        ),
-      },
+    path: 'statistics',
+    element: <AdminRoute><AdminStats /></AdminRoute>
+},
       {
         path: "my-applications",
         element: (
@@ -100,10 +97,6 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
-      },
-      {
-        path: "payment/:id",
-        element: <Payment />,
       },
     ],
   },

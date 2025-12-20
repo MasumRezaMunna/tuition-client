@@ -6,23 +6,20 @@ import { Helmet } from "react-helmet-async";
 
 const AllTuitions = () => {
     const axiosPublic = useAxiosPublic();
-    const [search, setSearch] = useState("");
-    const [sort, setSort] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
+    const [searchTerm, setSearchTerm] = useState("");
 
-    
-    const { data, isLoading } = useQuery({
-        queryKey: ['tuitions', search, sort, currentPage],
+    const { data: tuitions = [], isLoading } = useQuery({
+        queryKey: ['tuitions'],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/tuitions?search=${search}&sort=${sort}&page=${currentPage}&limit=${itemsPerPage}`);
+            const res = await axiosPublic.get('/tuitions');
             return res.data;
         }
     });
 
-    const tuitions = data?.result || [];
-    const totalItems = data?.total || 0;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const filteredTuitions = tuitions.filter(item => 
+        item.subject.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        item.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     if (isLoading) {
         return <div className="text-center mt-20"><span className="loading loading-bars loading-lg"></span></div>;
@@ -30,52 +27,35 @@ const AllTuitions = () => {
 
     return (
         <div className="pt-24 pb-12 px-4 max-w-screen-xl mx-auto">
-            <Helmet><title>eTuitionBd | All Jobs</title></Helmet>
+            <Helmet>
+                <title>eTuitionBd | All Jobs</title>
+            </Helmet>
 
             <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold mb-4">Available Tuitions</h2>
+                <p className="text-gray-500">Find the perfect student for your schedule</p>
                 
-                <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                    
+                <div className="mt-6 flex justify-center">
                     <input 
                         type="text" 
                         placeholder="Search by Subject or Location..." 
-                        className="input input-bordered w-full max-w-xs"
-                        onChange={(e) => {
-                            setSearch(e.target.value);
-                            setCurrentPage(1); 
-                        }}
+                        className="input input-bordered w-full max-w-md"
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
-
-                    
-                    <select 
-                        className="select select-bordered"
-                        onChange={(e) => setSort(e.target.value)}
-                    >
-                        <option value="">Sort by Budget</option>
-                        <option value="asc">Low to High</option>
-                        <option value="desc">High to Low</option>
-                    </select>
                 </div>
             </div>
 
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tuitions.map(item => <TuitionCard key={item._id} item={item} />)}
-            </div>
-
-            
-            <div className="flex justify-center mt-12 join">
-                {[...Array(totalPages).keys()].map(page => (
-                    <button
-                        key={page}
-                        onClick={() => setCurrentPage(page + 1)}
-                        className={`join-item btn ${currentPage === page + 1 ? 'btn-primary' : ''}`}
-                    >
-                        {page + 1}
-                    </button>
-                ))}
-            </div>
+            {filteredTuitions.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredTuitions.map(item => (
+                        <TuitionCard key={item._id} item={item} />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center text-gray-500 mt-10">
+                    <h3 className="text-2xl">No tuitions found matching your search.</h3>
+                </div>
+            )}
         </div>
     );
 };

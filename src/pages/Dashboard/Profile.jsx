@@ -70,7 +70,7 @@ const Profile = () => {
                     </div>
                     <div className="form-control">
                         <label className="label"><span className="label-text">Email (Read Only)</span></label>
-                        <input type="text" value={user?.email} readOnly className="input input-bordered bg-gray-500 cursor-not-allowed" />
+                        <input type="text" value={user?.email} readOnly className="input input-bordered bg-gray-100 cursor-not-allowed" />
                     </div>
                     <div className="form-control">
                         <label className="label"><span className="label-text">Phone Number</span></label>
