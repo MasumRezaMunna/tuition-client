@@ -1,4 +1,3 @@
-// src/pages/Auth/Login.jsx
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useContext } from "react";
@@ -6,29 +5,35 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 
+const axiosPublic = axios.create({
+  baseURL: import.meta.env.VITE_API_URL
+});
+
 const Login = () => {
-  const { googleSignIn } = useContext(AuthContext);
+  const { googleSignIn, signIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/dashboard";
 
-  // Email/password login
   const handleLogin = async (e) => {
-    e.preventDefault(); // prevent form reload
+    e.preventDefault();
 
     const email = e.target.email.value;
-    const password = e.target.password.value; // optional
-    const name = ""; // optional
-    const photoURL = ""; // optional
+    const password = e.target.password.value;
 
     try {
-      const res = await axios.post("http://localhost:5000/login", {
-        email,
-        name,
-        photoURL,
-      });
+      const result = await signIn(email, password);
+      const loggedUser = result.user;
 
-      const { token, user } = res.data;
+      const userInfo = {
+        name: loggedUser.displayName || "",
+        email: loggedUser.email,
+        photoURL: loggedUser.photoURL || "",
+      };
+
+      const res = await axiosPublic.post("/users", userInfo);
+      const { token } = res.data;
+
       localStorage.setItem("access-token", token);
 
       navigate(from, { replace: true });
@@ -38,25 +43,25 @@ const Login = () => {
     }
   };
 
-  // Google login
   const handleGoogleSignIn = async () => {
     try {
       const result = await googleSignIn();
       const user = result.user;
 
-      // Save user to DB + get JWT
-      const res = await axios.post("http://localhost:5000/login", {
+      const userInfo = {
+        name: user.displayName,
         email: user.email,
-        name: user.displayName || "",
-        photoURL: user.photoURL || "",
-      });
+        photoURL: user.photoURL,
+      };
 
+      const res = await axiosPublic.post("/users", userInfo);
       const { token } = res.data;
+
       localStorage.setItem("access-token", token);
 
       navigate(from, { replace: true });
     } catch (error) {
-      console.error("Google Sign-In Error:", error.message);
+      console.error("Google Sign-In Error:", error);
       alert("Google Sign-In failed. Check console.");
     }
   };
@@ -68,7 +73,7 @@ const Login = () => {
       </Helmet>
 
       <div className="hero min-h-screen bg-base-200">
-        <div className=" flex-col lg:flex-row-reverse">
+        <div className="flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left w-full">
             <h1 className="text-5xl font-bold mb-4">Login now!</h1>
           </div>
